@@ -7,13 +7,7 @@ const path = require('path');
 const mysql = require('mysql2');
 const profilepath = "/uploads/images/profile";
 const postpath = '/uploads/images/post';
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '**Ww04110812',
-    database: 'mydb'
-
-});
+db = require('../lib/db');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         console.log("📂 destination() 실행됨 (파일 저장 위치 설정 중...)");
