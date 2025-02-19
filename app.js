@@ -252,4 +252,5 @@ app.use((req, res, next) => {
 });
 
 
-app.listen(3000, () => console.log('정상 작동'));
+// app.listen(3000, () => console.log('정상 작동'));
+module.exports = app;
