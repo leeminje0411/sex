@@ -8,26 +8,10 @@ const cors = require('cors');
 app.use(cors());
 const mysql = require('mysql2');
 const multer = require('multer');
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '**Ww04110812',
-    database: 'mydb'
+const db = require('./lib/db');
 
-});
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/images/review'); // 업로드될 디렉토리
-    },
-    filename: (req, file, cb) => {
-        // 파일명: 날짜_원본이름
-        const ext = path.extname(file.originalname);
-        const base = path.basename(file.originalname, ext);
-        cb(null, Date.now() + '_' + base + ext);
-    }
-});
-const upload = multer({ storage });
-module.exports = upload;
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({ extended: true }));
