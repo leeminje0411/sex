@@ -4,6 +4,7 @@ const multer = require('multer');
 const func = require('../lib/func');
 const process = require('../lib/process');
 
+
 router.get('/:id', async (req, res) => {
     console.log('뭔가 오긴왔는데');
     let id = req.params.id;

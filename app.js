@@ -9,6 +9,8 @@ app.use(cors());
 const mysql = require('mysql2');
 const multer = require('multer');
 const db = require('./lib/db');
+const ejs = require('ejs');
+
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
