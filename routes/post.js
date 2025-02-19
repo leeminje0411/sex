@@ -8,7 +8,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
-
 router.get('/', async (req, res) => {
     res.render('post', await func.is_user(req, res));
 })
