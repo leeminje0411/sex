@@ -1,0 +1,85 @@
+// const router = express.Router();
+// const ejs = require('ejs');
+// const multer = require('multer');
+// const { profile } = require('console');
+// const mysql = require('mysql2');
+// const fs = require('fs');
+// const process = require('./lib/process');
+
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         console.log("📂 destination() 실행됨 (파일 저장 위치 설정 중...)");
+//         cb(null, 'uploads/');
+//     },
+//     filename: function (req, file, cb) {
+//         const uniqueName = Date.now() + path.extname(file.originalname);
+//         console.log(uniqueName);
+//         console.log("📂 filename() 실행됨 (파일명 설정 중...):", uniqueName);
+//         cb(null, uniqueName);
+//     }
+// });
+
+// const db = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '**Ww04110812',
+//     database: 'mydb'
+
+// });
+// app.get('/login', async (req, res) => {
+//     res.render('login', { ...await func.is_user(req, res), ... await func.getProducts(req, res) });
+// })
+
+// app.post('/login/process', async (req, res) => {
+//     await process.loginProcess(req, res);
+// }
+// )
+// app.get('/login/signup', async (req, res) => {
+//     res.render('signup', { ... await func.is_user(req, res), ... await func.getProducts(req, res) });
+// })
+// app.post('/login/signup/process', async (req, res) => {
+//     await process.signupProcess(req, res);
+// })
+// app.get('/login/logout', (req, res) => {
+//     req.session.destroy();
+//     res.redirect(302, '/');
+// })
+// app.get('/post/check', (req, res) => {
+//     if (req.session.username) {
+//         res.json({ loggedIn: true });
+//     } else {
+//         res.json({ loggedIn: false });
+//     }
+// })
+// app.get('/post', async (req, res) => {
+//     res.render('post', await func.is_user(req, res));
+// })
+// app.post('/post/process', upload.single('image'), async (req, res) => {
+//     await process.postProcess(req, res);
+// }
+// )
+// 카테고리 분류
+
+// app.get('/category/1', async (req, res) => {
+//     res.render('category1', { ...await func.category(req, res, 1), name: '디자인', });
+// })
+// app.get('/category/2', async (req, res) => {
+//     res.render('category1', { ...await func.category(req, res, 2), name: '마케팅', });
+// })
+// app.get('/category/3', async (req, res) => {
+//     res.render('category1', { ...await func.category(req, res, 3), name: '영상/사진/음향', });
+// })
+// app.get('/category/4', async (req, res) => {
+//     res.render('category1', { ...await func.category(req, res, 4), name: 'IT/프로그래밍', });
+// })
+// app.get('/profile', async (req, res) => {
+//     res.render('profile', { ...await func.is_user(req, res), ...await func.myproducts(req, res) });
+// })
+
+// app.post('/profile/upload', upload.single('image'), async (req, res) => {
+//     await process.profileProcess(req, res);
+// })
+
+// app.post('/profile/products/delete', async (req, res) => {
+//     await process.deleteProcess(req, res);
+// });

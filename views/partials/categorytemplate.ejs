@@ -1,0 +1,38 @@
+<section class="bg-white bg-opacity-75 container" style="min-height: 10vh;">
+
+    <div>
+        <h1 class="h1 mt-5">
+            <%= name %>
+        </h1>
+        <p class="" sytle="font-size: 30px">
+            <%= '홈>' +name%>
+        </p>
+    </div>
+</section>
+
+<<section>
+    <div class="container">
+        <div class="d-flex justify-content-around"> <!-- ✅ row에 간격 추가 -->
+            <% post.forEach(data=>{ %>
+
+                <div class="col-2 mx-2 mt-3"> <!-- ✅ col-4은 div에 적용 -->
+                    <div class="card" style="height:307px; width: 232.2px">
+                        <img src="<%= data.image_url %>" class="card-img-top w-100"
+                            style="height: 55%; object-fit: cover;">
+                        <div class="card-body" style="height: 45%">
+                            <p class="h5 card-text">
+                                <%= data.title%>
+                            </p>
+                            <p href="#" class="">5,000원</p>
+                            <p href="#" class="">
+                                <%=data.username%>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <% }) %>
+        </div>
+    </div>
+
+    </section>>

@@ -1,0 +1,89 @@
+<% include partials/navbar %>
+
+    <body class="bg-success-subtle bg-opacity-75">
+
+        <div class="container mt-5" style="max-width: 900px;">
+            <h2 class="mb-4">서비스 등록</h2>
+            <form action="post/process" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="category" class="form-label">카테고리 선택</label>
+                    <select class="form-select" id="category" name="category" required>
+                        <option value="" disabled selected>카테고리를 선택하세요</option>
+                        <option value="1">디자인</option>
+                        <option value="2">마케팅</option>
+                        <option value="3">영상/사진/음향</option>
+                        <option value="4">IT/프로그래밍</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">서비스 이미지</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                        onchange="previewImage(event)">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">이미지 미리보기</label>
+                    <img id="preview" src="#" alt="이미지 미리보기" style="max-width: 300px; display: none;">
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea class="form-control" id="content" name="description" rows="5"
+                        style="height: 300px;"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">금액(VAT 포함)</label>
+                    <input class="form-control" id="price" name="price" rows="5" required>
+                </div>
+
+                <div class="d-flex flex-column">
+                    <button name="action" type="submit" value="premium" class="btn btn-warning" <% if (username.premium_slots===0) { %> disabled <% } %>
+                            >
+                            프리미엄으로 등록하기
+                    </button>
+
+                    <div class="d-flex">
+                        <button name="action" type="submit" value="normal" class="btn btn-primary">등록</button>
+                        <a href="/" class="btn btn-secondary">취소</a>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+
+
+
+        </nav>
+
+        <script>
+            function previewImage(event) {
+                const preview = document.getElementById('preview');
+                const file = event.target.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function () {
+                        preview.src = reader.result;
+                        preview.style.display = "block";
+                        preview.style.width = '180px';
+                        preview.style.height = 'auto';// ✅ 이미지 미리보기 표시
+                    };
+
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = ""; // ✅ 빈 문자열로 설정 (정상 작동)
+                    preview.style.display = "none"; // ✅ 파일 없으면 숨김
+                }
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+
+
+    </body>
+
+    </html>

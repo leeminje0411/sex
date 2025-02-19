@@ -1,0 +1,74 @@
+<section class="bg-success-subtle bg-opacity-75" style="min-height: 20vh;">
+    <div class="container w-100 w-sm-75 d-flex justify-content-between p-3">
+        <div class="">
+            <p class=""> 홈>
+                <%= specifics.category==1 ? "디자인" : specifics.category==2 ? "마케팅" : specifics.category==3 ? "영상/사진/음향" :
+                    specifics.category==4 ? "IT/프로그래밍" : "기타" %>
+            </p>
+            <p class="h1">
+                <%= specifics.title %>
+            </p>
+
+            <span class="display-10">
+
+                <%= specifics.username %>
+            </span>
+        </div>
+
+        <img src="<%= specifics.image_url %>"
+            style="width: 359px; height: 259px; object-fit: cover; border-radius: 5%;">
+
+    </div>
+</section>
+
+<section>
+    <div class="row justify-content-around p-5">
+        <div class="col-8 col-sm-12 col-lg-4">
+            <h1 class="h3">서비스 설명</h1>
+            <article><%- specifics.description.replace(/\r\n|\r|\n/g, '<br>' ) %></article>
+
+        </div>
+        <div class="col-4 col-sm-12 col-lg-3" style="position: sticky;">
+            <div class="container ">
+
+                <div class="d-flex flex-column align-items-center tab-content border border-success p-5 rounded">
+                    
+                <img src="<%= author.profile %>" class="img-fluid w-75 rounded-circle" style="
+                width: 100px; /* 가로 고정 */
+                height: 100px; /* 세로 고정 */
+                object-fit: cover;
+                "alt="">
+                <h3 class="price mt-2 mb-0">
+                    <!-- <%=specifics.price%> -->
+                    <%= author.username %>
+                </h3>
+                    <p class="text-muted"><%= author.bio %> </p>
+
+                
+                    <div class="d-flex flex-column mt-4">
+                        <p class="text-muted">리뷰 평점</p>
+                        <p class="fw-bold"><%= rating.avg_rating%></p>
+                        <br>
+                        <% include ratingPreview %>
+                   </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="text-muted">고용수</p>
+                        <p class="fw-bold">2회</p>
+                    </div>
+
+                    <!-- 🔥 버튼 -->
+                    <button class="btn btn-outline-warning w-100 p-2 mt-3">전문가에게 문의하기</button>
+                    <button class="btn btn-warning w-100 p-2 mt-2">구매하기</button>
+                    <a href="/specifics/review?products=<%= specifics.id %>"class="btn btn-warning w-100 p-2 mt-2">리뷰 작성</a>
+
+                    <!-- 🔥 안내 문구 -->
+                    <small class="text-muted d-block mt-3">
+                        · 서비스 제공 완료 후 전문가에게 전달되니 안전하게 거래하세요.<br>
+                        · 결제 시 수수료 3.5%(VAT 포함)가 추가돼요.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

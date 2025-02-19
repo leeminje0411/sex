@@ -1,0 +1,141 @@
+<section>
+    <div class="container mt-3">
+        <div class="d-flex justify-content-around"> <!-- ✅ row에 간격 추가 -->
+            <% post.forEach(data=>{ %>
+
+                <div class="col-2 mx-2 mt-3"> <!-- ✅ col-4은 div에 적용 -->
+                    <a href="/specifics/<%= data.id %>" class="text-decoration-none text-dark">
+                        <div class="card" style="width: 232.2px;">
+                            <img src="<%= data.image_url %>" class="card-img-top"
+                                style="height: 168px;  object-fit: cover;">
+                            <div class="ms-2" style="position: relative;">
+                                <p class="h6 title-span mt-2" style="font-weight: bold;">
+                                    <%= data.title%>
+                                </p>
+                    </a>
+                    
+
+                    <div class="d-flex justify-content-start">
+                        <div style="">
+                            <span class="description-span" style="">
+                                <%= data.description %>
+                            </span>
+                            <span class="price-span" style="font-size: 16px;" style="margin-bottom: 0;">
+                                <%=data.price %>
+                            </span>
+                            <br>
+                           
+                        </div>
+                        <div class="edit d-flex gap-2 justify-content-end align-items-end"
+                            style="position: absolute; bottom: 10px; right: 10px;">
+                            <!-- 수정 버튼 -->
+                        <button class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-1 edit-btn"  data-bs-target="#editModal"  data-bs-toggle="modal"
+                            data-id="<%= data.id %>" data-title="<%= data.title %>" data-price="<%= data.price %>"
+                            data-description="<%= data.description %>" data-image="<%= data.image_url %>" style="width: 50px; height: 20px;">
+                            <i class="fas fa-pencil-alt" style="font-size: 10px;"></i>
+                            <span style="font-size: 10px;">수정</span>
+                        </button>
+                        
+                        <!-- 서비스 수정 모달 -->
+                        <!-- <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
+                            수정
+                        </button> -->
+                        
+                        <!-- 📌 서비스 수정 모달 -->
+                        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel">서비스 수정</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- 카테고리 선택 -->
+                                        <label for="editCategory" class="d-block fw-bold mt-3">카테고리 선택</label>
+                                        <select id="editCategory" class="form-control">
+                                            <option value="">카테고리를 선택하세요</option>
+                                            <option value="1">디자인</option>
+                                            <option value="2">마케팅</option>
+                                            <option value="3">영상/사진/음향</option>
+                                            <option value="4">IT/프로그래밍</option>
+                                        </select>
+                        
+                                        <!-- 제목 입력 -->
+                                        <label for="editTitle" class="d-block fw-bold mt-3">제목</label>
+                                        <input type="text" id="editTitle" class="form-control">
+                        
+                                        <!-- 서비스 이미지 -->
+                                        <label class="d-block fw-bold mt-3">서비스 이미지</label>
+                                        <input type="file" id="editImage" class="form-control" accept="image/*">
+                                        <img id="editImagePreview" src="" class="w-50 mt-3 img-fluid"
+                                            style="max-height: 200px; object-fit: cover;">
+                        
+                                        <!-- 내용 입력 -->
+                                        <label for="editDescription" class="d-block fw-bold mt-3">내용</label>
+                                        <textarea id="editDescription" class="form-control" rows="3"></textarea>
+                        
+                                        <!-- 가격 입력 -->
+                                        <label for="editPrice" class="d-block fw-bold mt-3">금액 (VAT 포함)</label>
+                                        <input type="text" id="editPrice" class="form-control">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-warning edit-update">수정하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+              
+
+         
+           
+
+                            <!-- 삭제 버튼 -->
+                            <button data-id="<%=data.id%>"
+                                class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-1 delete-btn"
+                                style="width:50px; height: 20px;" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash" style="font-size: 10px;"></i>
+                                <span style="font-size: 10px;">삭제</span>
+                            </button>
+                            <!-- 삭제 확인 모달 -->
+                            <!-- 삭제 모달 -->
+                            <div id="deleteModal" class="modal fade" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm"> <!-- ✅ 작은 크기의 모달 -->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">삭제 확인</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <p>정말 삭제하시겠습니까?</p>
+                                            <p class="small text-muted">삭제하려면 <b>"삭제합니다"</b>를 입력하세요.</p>
+                                            <input type="text" id="deleteConfirmInput" class="form-control text-center" placeholder="삭제합니다" autocomplete="off">
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                            <button id="confirmDeleteBtn" class="btn btn-danger" data-id="<%= data.id %>"disabled>삭제</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+        </div>
+
+    </div>
+
+    <% }) %>
+        </div>
+        </div>
+
+</section>
+
+
+
+   
+   
+    

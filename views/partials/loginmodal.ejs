@@ -1,0 +1,121 @@
+<!-- 로그인 모달 -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- 모달 헤더 -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">로그인</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- 모달 바디 -->
+            <div class="modal-body">
+                <!-- 로그인 폼 (기본적으로 action="/login/process") -->
+                <form id="loginForm" action="/login/process" method="post">
+                    <div class="mb-3">
+                        <label for="loginId" class="form-label">아이디</label>
+                        <input type="text" class="form-control" id="loginId" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password" required>
+                    </div>
+
+                    <!-- 비밀번호 찾기 링크 -->
+                    <div class="mb-2">
+                        <a href="/password/forgot" class="link-secondary" style="font-size: 0.9rem;">비밀번호를 잊으셨나요?</a>
+                    </div>
+
+                    <!-- 소셜 로그인 버튼들... -->
+
+                    <!-- 폼 제출 버튼 -->
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-warning">로그인</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 모달 푸터 (선택) -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.getElementById('loginForm');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // 폼의 기본 submit 막기
+
+            // 폼 데이터 가져오기
+            const formData = new FormData(loginForm);
+            console.log(formData);
+            // Fetch로 AJAX POST 요청
+           
+                fetch('/login/process', {
+                    method: 'POST',
+                    body: formData
+                }).then(response=> response.json())
+                .then(data=> {
+
+                        
+                    if(data.success===true){
+
+                    // 모달 닫기 (부트스트랩 v5)
+                    const loginModalEl = document.getElementById('loginModal');
+                    const modalInstance = bootstrap.Modal.getInstance(loginModalEl);
+                    modalInstance.hide()
+
+                     const loginButton = document.getElementById('loginButton');
+                        if (loginButton) {
+                            loginButton.remove();
+                        }
+
+                        // 2) 드롭다운 HTML 생성
+                        // (data.username, data.profile 등을 서버에서 JSON으로 넘겨준다고 가정)
+                        const dropdownHTML = `
+          <div class="dropdown">
+            <button 
+              class="btn btn-warning dropdown-toggle d-flex align-items-center custom-btn-shape" 
+              type="button"
+              id="userDropdown" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false"
+            >
+              <img 
+                src="${data.user.profile}" 
+                alt="Profile" 
+                class="rounded-circle profile-img-fixed profile-img"
+              >
+              <span class="ms-2 username-spacing">${data.user.username}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="/profile">내 프로필</a></li>
+              <li><a class="dropdown-item" href="/post">글쓰기</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="/login/logout">로그아웃</a></li>
+            </ul>
+          </div>
+        `;
+
+                        // 3) authArea에 드롭다운 삽입
+                        const authArea = document.getElementById('authArea');
+                        authArea.insertAdjacentHTML('beforeend', dropdownHTML);
+
+                    }
+                    else {
+                    console.log('success가 false던데요?')
+                    alert('로그인 실패: ' + data.message);
+                }
+              }).catch(err=> {
+
+                 console.error('로그인 에러:', err);
+                  alert('오류 발생 : ');
+              }) 
+    })});
+</script>

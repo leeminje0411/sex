@@ -1,0 +1,414 @@
+<section class="pt-md-5 mt-3">
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <span class="h3 m-0 text-center">프리미엄 전문가의 서비스</span>
+        <a href="#" class="btn btn-warning ms-3">더보기</a>
+    </div>
+
+    <!-- position-relative: 내부 절대배치용 -->
+    <div class="container mt-5 position-relative">
+
+        <!-- 이 전 버튼 -->
+        <!-- start-0: 왼쪽 끝, top-50: 세로 중앙, translate-middle-y: 버튼 높이 절반만큼 위/아래 이동
+         ms-5: 카드와 버튼 사이의 여유 공간을 크게 잡기 위해 왼쪽 방향으로 여백을 줌 -->
+        <button type="button" class="btn btn-secondary position-absolute top-50 start-0 translate-middle-y ms-5 z-3"
+            onclick="slideLeft()">
+            이전
+        </button>
+
+        <!-- 수평 스크롤 가능 영역 -->
+        <!-- overflow-auto: 가로 스크롤 표시,
+         d-flex flex-nowrap: 카드들이 한 줄에 계속 이어짐,
+         row-cols-4 + g-4: 기존 카드 배치 유지 -->
+        <div id="premiumScroll" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 d-flex flex-nowrap overflow-auto"
+            style="scroll-behavior: smooth;">
+            <% premium.forEach(function(data) { %>
+                <div class="col">
+                    <a href="/specifics/<%= data.id %>" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                            <div class="ratio ratio-4x3">
+                                <img src="<%= data.image_url %>" class="img-fluid" style="object-fit: cover;"
+                                    alt="카드 이미지">
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="h6 fw-bold">
+                                    <%= data.title %>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-end mt-auto">
+                                    <div>
+                                        <span class="d-block" style="font-size:16px;">
+                                            <%= data.price %>
+                                        </span>
+                                        <span class="text-muted" style="font-size:12px;">
+                                            <%= data.username %>
+                                            <%= post.avgRating %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <% }) %>
+        </div>
+
+        <!-- 다음 버튼 -->
+        <!-- end-0: 오른쪽 끝, top-50: 세로 중앙, translate-middle-y, me-5: 오른쪽 여유 공간 -->
+        <button type="button" class="btn btn-secondary position-absolute top-50 end-0 translate-middle-y me-5 z-3"
+            onclick="slideRight()">
+            다음
+        </button>
+    </div>
+</section>
+<style>
+    /* 새로 추가된 요소가 오른쪽에서 슬며시 나타나는 애니메이션 */
+    @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(1000px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* 왼쪽에서 슬며시 나타나는 애니메이션 */
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-1000px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* 실제 클래스 */
+  .fade-in-right {
+    animation: slideInRight 1s ease forwards;
+  }
+  .fade-in-left {
+    animation: slideInLeft 1s ease forwards;
+  }
+</style>
+
+<script>
+    let offset = 0;
+        const limit = 4;
+        let slideDirection = 'right'; // 'right' or 'left'
+
+        // ...
+
+        function slideRight() {
+            offset += limit;
+            slideDirection = 'right';   // 다음은 오른쪽 슬라이드
+            fetchItems(offset);
+            console.log('Next offset:', offset);
+        }
+
+        function slideLeft() {
+            offset = Math.max(offset - limit, 0);
+            slideDirection = 'left';    // 이전은 왼쪽 슬라이드
+            fetchItems(offset);
+            console.log('Prev offset:', offset);
+        }
+
+    // 페이지 로딩 시 최초 4개 불러오기
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchItems(offset);
+    });
+
+    // 서버로부터 데이터 가져오기
+    function fetchItems(currentOffset) {
+        // 서버에 GET 요청: /premium/list?offset=...
+        fetch(`/getPremium/?offset=${currentOffset}`)
+            .then(res => res.json())
+            .then(data => {
+                // data는 배열 형태 [{id:..., title:..., ...}, ...]
+                // DOM에 반영
+                
+                renderItems(data);
+            })
+            .catch(err => {
+                console.error('데이터 불러오기 에러:', err);
+            });
+    }
+
+    // DOM을 새로 그리는 함수
+   function renderItems(items) {
+        const container = document.getElementById('premiumScroll');
+        container.innerHTML = '';
+
+        items.forEach(item => {
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col';
+
+            // 여기서 slideDirection에 따라 다른 클래스를 붙인다
+            if (slideDirection === 'right') {
+                colDiv.classList.add('fade-in-right');
+            } else {
+                colDiv.classList.add('fade-in-left');
+            }
+
+            colDiv.innerHTML = `
+      <a href="/specifics/${item.id}" class="text-decoration-none text-dark">
+        <div class="card h-100">
+          <div class="ratio ratio-4x3">
+            <img 
+              src="${item.image_url}" 
+              class="img-fluid" 
+              style="object-fit: cover;"
+              alt="카드 이미지">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <p class="h6 fw-bold">
+              ${item.title}
+            </p>
+            <div class="d-flex justify-content-between align-items-end mt-auto">
+              <div>
+                <span class="d-block" style="font-size:16px;">
+                  ${item.price}
+                </span>
+                <span class="text-muted" style="font-size:12px;">
+                  ${item.username || ''}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    `;
+            container.appendChild(colDiv);
+        });
+    }
+
+
+</script>
+
+
+
+
+<!-- 서비스 목록 섹션 (2줄×4칸) -->
+<section class="pt-md-5 mt-3 position-relative" style="min-height: 350px;">
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <span class="h3 m-0">서비스 목록</span>
+        <a href="#" class="btn btn-warning ms-3">더보기</a>
+    </div>
+
+    <!-- position-relative: 버튼을 절대 배치 위해 -->
+    <div class="container mt-5 position-relative">
+
+        <!-- 이 전(왼쪽) 버튼 -->
+        <button type="button" class="btn btn-secondary position-absolute top-50 start-0 translate-middle-y ms-3 z-3"
+            style="width: 80px;" onclick="serviceSlideLeft()">
+            이전
+        </button>
+
+        <!-- row row-cols-4 (2줄*4칸=8개) -->
+        <!-- 여기서 만약 진짜 가로 스크롤 효과를 내려면 flex-nowrap + overflow-auto 필요 -->
+        <!-- 지금은 2줄 배치라면 스크롤이 실제로는 별로 없을 수 있음 -->
+        <div id="serviceScroll" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" style="scroll-behavior: smooth;">
+            <% post.forEach(function(data) { %>
+                <div class="col">
+                    <a href="/specifics/<%= data.id %>" class="text-decoration-none text-dark">
+                        <div class="card h-100" style="border-radius: 10px; overflow: hidden;">
+                            <div class="ratio ratio-4x3">
+                                <img src="<%= data.image_url %>" class="img-fluid" style="object-fit: cover;"
+                                    alt="카드 이미지">
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="h6 fw-bold">
+                                    <%= data.title %>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-end mt-auto">
+                                    <div>
+                                        <span class="d-block" style="font-size:16px;">
+                                            <%= data.price %>
+                                        </span>
+                                        <span class="text-muted" style="font-size:12px;">
+                                            
+                                            <!-- <%= data.username %>
+                                            <%= data.avg_rating %>
+                                            <% include ratingPreview %> -->
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <% }) %>
+        </div>
+
+        <!-- 다음(오른쪽) 버튼 -->
+        <button type="button" class="btn btn-secondary position-absolute top-50 end-0 translate-middle-y me-3 z-3"
+            style="width: 80px;" onclick="serviceSlideRight()">
+            다음
+        </button>
+    </div>
+</section>
+
+<!-- fade-in-right / fade-in-left 애니메이션 정의 (필요 시) -->
+<style>
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(1000px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-1000px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .fade-in-right {
+        animation: slideInRight 1s ease forwards;
+    }
+
+    .fade-in-left {
+        animation: slideInLeft 1s ease forwards;
+    }
+</style>
+
+<script>
+    // 충돌 방지: 'serviceOffset' 등 고유 변수명 사용
+    let serviceOffset = 0;
+    const serviceLimit = 8;  // 한 번에 가져올 개수 (예: 8개)
+    let serviceSlideDirection = 'right'; // 'right' or 'left'
+
+    // 페이지 로딩 시 첫 데이터(예: 최초 8개) 불러오기
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchServiceItems(serviceOffset);
+    });
+
+    // 이전 버튼
+    function serviceSlideLeft() {
+        // 이전 페이지로 이동
+        serviceOffset = Math.max(serviceOffset - serviceLimit, 0);
+        serviceSlideDirection = 'left';
+        fetchServiceItems(serviceOffset);
+        console.log('serviceOffset:', serviceOffset);
+    }
+
+    // 다음 버튼
+    function serviceSlideRight() {
+        // 다음 페이지로 이동
+        serviceOffset += serviceLimit;
+        serviceSlideDirection = 'right';
+        fetchServiceItems(serviceOffset);
+        console.log('serviceOffset:', serviceOffset);
+    }
+
+    // 서버에서 데이터 받아오기 (AJAX)
+    function fetchServiceItems(currentOffset) {
+        // '/service/list?offset=...' 형태로 요청 (서버 라우트 맞게 수정)
+        fetch(`/getProducts?offset=${currentOffset}`)
+            .then(res => res.json())
+            .then(data => {
+                // data: 배열 [{id:..., title:..., image_url:...}, ...]
+                
+                renderServiceItems(data);
+            })
+            .catch(err => {
+                console.error('서비스 데이터 에러:', err);
+            });
+    }
+
+    // 받아온 데이터로 DOM 재구성
+    function renderServiceItems(items) {
+        const container = document.getElementById('serviceScroll');
+        container.innerHTML = ''; // 기존 내용 제거
+
+        items.forEach(item => {
+            // col 요소 생성
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col';
+
+            // 방향에 따른 애니메이션 클래스 적용
+            if (serviceSlideDirection === 'right') {
+                colDiv.classList.add('fade-in-right');
+            } else {
+                colDiv.classList.add('fade-in-left');
+            }
+
+            colDiv.innerHTML = `
+        <a href="/specifics/${item.id}" class="text-decoration-none text-dark">
+          <div class="card h-100" style="border-radius:10px; overflow:hidden;">
+            <div class="ratio ratio-4x3">
+              <img 
+                src="${item.image_url}"
+                class="img-fluid"
+                style="object-fit:cover;"
+                alt="카드 이미지"
+              >
+            </div>
+            <div class="card-body d-flex flex-column">
+              <p class="h6 fw-bold">${item.title}</p>
+              <div class="d-flex justify-content-between align-items-end mt-auto">
+                <div>
+                  <span class="d-block" style="font-size:16px;">
+                    ${item.price}
+                  </span>
+                  <span class="text-muted" style="font-size:12px;">
+                    ${item.username || ''}
+                  </span>
+                   <span class="text-muted" style="font-size:12px;">
+                    ${item.avg_rating|| ''}
+                  </span>
+                  <div class="star-rating-wrapper" data-rating="${item.avg_rating}">
+    
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+</div>
+<script>
+        (function () {
+        const wrapper = document.currentScript.closest('.star-rating-wrapper');
+        const ratingValue = parseFloat(wrapper.dataset.rating);
+        // 예: ratingValue = 4.5
+        // 별 아이콘들
+        const stars = wrapper.querySelectorAll('i');
+
+        // 별 아이콘에 채울 로직(단순 예시)
+        stars.forEach((star, idx) => {
+            const starIndex = idx + 1; // 1~5
+            if (starIndex <= Math.floor(ratingValue)) {
+                // 정수 부분은 완전히 채움
+                star.style.color = 'gold';
+            } else if (starIndex - ratingValue < 1 && starIndex > ratingValue) {
+                // 별 4.5면 4번째 별은 gold, 5번째 별은 반만?
+                // 단순히 반 별 아이콘 등으로 처리하려면, 별도의 로직 필요.
+            } else {
+                star.style.color = '#ccc';
+            }
+        });
+    })();
+</script>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+            container.appendChild(colDiv);
+        });
+    }
+    
+</script>

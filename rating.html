@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>별점</title>
+
+    <style>
+        .star-rating {
+            display: inline-block;
+            position: relative;
+            font-size: 30px;
+            /* 별 크기 조절 */
+            color: #ddd;
+            /* 기본 별 색 */
+        }
+
+        .star-rating .filled-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            color: gold;
+            /* 채운 별 색 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="star-rating">
+        <div class="filled-stars" style="width: 96%;"> <!-- 4.8점이면 96% -->
+            ★★★★★
+        </div>
+    </div>
+
+</body>
+
+</html>

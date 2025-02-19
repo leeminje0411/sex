@@ -1,0 +1,33 @@
+<div class="star-rating-wrapper" data-rating="${item.avg_rating}">
+    
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+    <i class="fa-solid fa-star"></i>
+</div>
+
+
+<script>
+        (function () {
+        const wrapper = document.currentScript.closest('.star-rating-wrapper');
+        const ratingValue = parseFloat(wrapper.dataset.rating);
+        // 예: ratingValue = 4.5
+        // 별 아이콘들
+        const stars = wrapper.querySelectorAll('i');
+
+        // 별 아이콘에 채울 로직(단순 예시)
+        stars.forEach((star, idx) => {
+            const starIndex = idx + 1; // 1~5
+            if (starIndex <= Math.floor(ratingValue)) {
+                // 정수 부분은 완전히 채움
+                star.style.color = 'gold';
+            } else if (starIndex - ratingValue < 1 && starIndex > ratingValue) {
+                // 별 4.5면 4번째 별은 gold, 5번째 별은 반만?
+                // 단순히 반 별 아이콘 등으로 처리하려면, 별도의 로직 필요.
+            } else {
+                star.style.color = '#ccc';
+            }
+        });
+    })();
+</script>
