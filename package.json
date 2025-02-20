@@ -13,5 +13,27 @@
     "mysql2": "^3.12.0",
     "serve-static": "^1.16.2",
     "ejs": "^3.1.9"
-  }
+  },
+  "name": "realone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leeminje0411/sex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leeminje0411/sex/issues"
+  },
+  "homepage": "https://github.com/leeminje0411/sex#readme"
 }
